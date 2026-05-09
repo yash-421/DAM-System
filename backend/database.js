@@ -32,57 +32,31 @@ if (isProd) {
 
   // Wrapper for compatibility
   db = {
-    run: (sql, params, callback) => {
-      // Convert SQLite placeholders (?) to PostgreSQL ($1, $2, etc.)
-      let pgSql = sql;
-      let paramIndex = 1;
-      while (pgSql.includes('?')) {
-        pgSql = pgSql.replace('?', `$${paramIndex}`);
-        paramIndex++;
-      }
+    run: (sql, params = [], callback) => {
+      const pgSql = convertPlaceholders(sql);
 
-      pool.query(pgSql, params, (err, result) => {
-        if (callback) {
-          callback(err);
-        }
-      });
+      pool.query(pgSql, params)
+        .then(() => callback && callback(null))
+        .catch(err => callback && callback(err));
     },
-    all: (sql, params, callback) => {
-      // Convert SQLite placeholders to PostgreSQL
-      let pgSql = sql;
-      let paramIndex = 1;
-      while (pgSql.includes('?')) {
-        pgSql = pgSql.replace('?', `$${paramIndex}`);
-        paramIndex++;
-      }
 
-      pool.query(pgSql, params, (err, result) => {
-        if (callback) {
-          callback(err, result ? result.rows : []);
-        }
-      });
-    },
-    get: (sql, params, callback) => {
-      // Convert SQLite placeholders to PostgreSQL
-      let pgSql = sql;
-      let paramIndex = 1;
-      while (pgSql.includes('?')) {
-        pgSql = pgSql.replace('?', `$${paramIndex}`);
-        paramIndex++;
-      }
+    all: (sql, params = [], callback) => {
+      const pgSql = convertPlaceholders(sql);
 
-      pool.query(pgSql, params, (err, result) => {
-        if (callback) {
-          callback(err, result && result.rows.length > 0 ? result.rows[0] : null);
-        }
-      });
+      pool.query(pgSql, params)
+        .then(result => callback && callback(null, result.rows))
+        .catch(err => callback && callback(err, []));
     },
-    serialize: (callback) => {
-      callback();
+
+    get: (sql, params = [], callback) => {
+      const pgSql = convertPlaceholders(sql);
+
+      pool.query(pgSql, params)
+        .then(result => callback && callback(null, result.rows[0] || null))
+        .catch(err => callback && callback(err, null));
     }
   };
-
-  console.log('Using PostgreSQL for production');
+    console.log('Using PostgreSQL for production');
 } else {
   // SQLite for development
   const sqlite3 = require('sqlite3').verbose();
