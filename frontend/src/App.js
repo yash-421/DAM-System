@@ -4,6 +4,13 @@ import './App.css';
 import AssetUploader from './components/AssetUploader';
 import AssetGallery from './components/AssetGallery';
 import SearchFilter from './components/SearchFilter';
+import dotenv from 'dotenv';
+
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env"
+    : ".env.local";
+dotenv.config({ path: envFile });
 
 function App() {
   const [assets, setAssets] = useState([]);
