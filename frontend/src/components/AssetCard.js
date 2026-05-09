@@ -9,6 +9,9 @@ function AssetCard({ asset, onDelete }) {
     return '📁';
   };
 
+  const API_BASE = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api`;
+
+
   const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -28,7 +31,7 @@ function AssetCard({ asset, onDelete }) {
       <div className="asset-preview">
         {isImage ? (
           <img
-            src={`http://localhost:5000/${asset.filename}`}
+            src={`${API_BASE}/assets/${asset.filename}`}
             alt={asset.originalName}
             className="asset-image"
           />
@@ -47,7 +50,7 @@ function AssetCard({ asset, onDelete }) {
 
       <div className="asset-actions">
         <a
-          href={`http://localhost:5000/api/assets/${asset.id}/download`}
+          href={`${API_BASE}/assets/${asset.id}/download`}
           className="btn-download"
           title="Download"
         >

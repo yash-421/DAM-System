@@ -10,6 +10,11 @@ function AssetUploader({ onUploadSuccess }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const API_BASE = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api`;
+
+
+
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setError('');
@@ -52,7 +57,7 @@ function AssetUploader({ onUploadSuccess }) {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/assets/upload',
+        `${API_BASE}/assets/upload`,
         formData,
         {
           headers: {
