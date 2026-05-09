@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -6,6 +5,12 @@ const fs = require('fs');
 const db = require('./database');
 const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
+
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env"
+    : ".env.local";
+require("dotenv").config({ path: envFile });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -66,7 +71,7 @@ app.post('/api/assets/upload', upload.single('file'), (req, res) => {
   const { tags } = req.body;
 
   const sql = `
-    INSERT INTO assets (id, filename, originalName, fileType, fileSize, tags, filePath)
+    INSERT INTO assets (id, filename, original_name, file_type, file_size, tags, file_path)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -89,10 +94,10 @@ app.post('/api/assets/upload', upload.single('file'), (req, res) => {
       res.json({
         id: assetId,
         filename: req.file.filename,
-        originalName: req.file.originalname,
-        fileType: req.file.mimetype,
-        fileSize: req.file.size,
-        uploadDate: new Date().toISOString()
+        original_name: req.file.originalname,
+        file_type: req.file.mimetype,
+        file_size: req.file.size,
+        upload_date: new Date().toISOString()
       });
     }
   );
@@ -105,12 +110,12 @@ app.get('/api/assets', (req, res) => {
   const params = [];
 
   if (search) {
-    sql += ' AND (originalName LIKE ? OR filename LIKE ?)';
+    sql += ' AND (original_name LIKE ? OR filename LIKE ?)';
     params.push(`%${search}%`, `%${search}%`);
   }
 
   if (fileType) {
-    sql += ' AND fileType = ?';
+    sql += ' AND file_type = ?';
     params.push(fileType);
   }
 
@@ -120,19 +125,26 @@ app.get('/api/assets', (req, res) => {
   }
 
   if (startDate) {
-    sql += ' AND uploadDate >= ?';
+    sql += ' AND upload_date >= ?';
     params.push(startDate);
   }
 
   if (endDate) {
-    sql += ' AND uploadDate <= ?';
+    sql += ' AND upload_date <= ?';
     params.push(endDate);
   }
 
-  sql += ' ORDER BY uploadDate DESC';
+  sql += ' ORDER BY upload_date DESC';
+
+  console.log("Query:" , sql);
+  console.log("Params:" , params);
+  
+  
 
   db.all(sql, params, (err, rows) => {
     if (err) {
+      console.log(err);
+      
       return res.status(500).json({ error: 'Database error' });
     }
     res.json(rows);
@@ -163,7 +175,7 @@ app.get('/api/assets/:id/download', (req, res) => {
     if (!row) {
       return res.status(404).json({ error: 'Asset not found' });
     }
-    res.download(row.filePath, row.originalName);
+    res.download(row.file_path, row.original_name);
   });
 });
 
@@ -183,8 +195,8 @@ app.delete('/api/assets/:id', (req, res) => {
         return res.status(500).json({ error: 'Database error' });
       }
 
-      if (fs.existsSync(row.filePath)) {
-        fs.unlinkSync(row.filePath);
+      if (fs.existsSync(row.file_path)) {
+        fs.unlinkSync(row.file_path);
       }
 
       res.json({ message: 'Asset deleted successfully' });

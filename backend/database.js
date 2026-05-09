@@ -1,8 +1,18 @@
 // Database initialization - supports both SQLite (dev) and PostgreSQL (production)
 const path = require('path');
-
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env"
+    : ".env.local";
+require("dotenv").config({ path: envFile });
 let db;
 const isProd = process.env.NODE_ENV === 'production';
+
+function convertPlaceholders(sql) {
+  let i = 1;
+  return sql.replace(/\?/g, () => `$${i++}`);
+}
+
 
 if (isProd) {
   // PostgreSQL for production
@@ -17,16 +27,16 @@ if (isProd) {
     CREATE TABLE IF NOT EXISTS assets (
       id TEXT PRIMARY KEY,
       filename TEXT NOT NULL,
-      "originalName" TEXT NOT NULL,
-      "fileType" TEXT NOT NULL,
-      "fileSize" INTEGER NOT NULL,
-      "uploadDate" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      original_name TEXT NOT NULL,
+      file_type TEXT NOT NULL,
+      file_size INTEGER NOT NULL,
+      upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       tags TEXT,
-      "filePath" TEXT NOT NULL
+      file_path TEXT NOT NULL
     );
 
-    CREATE INDEX IF NOT EXISTS idx_assets_originalName ON assets("originalName");
-    CREATE INDEX IF NOT EXISTS idx_assets_fileType ON assets("fileType");
+    CREATE INDEX IF NOT EXISTS idx_assets_originalName ON assets(original_name);
+    CREATE INDEX IF NOT EXISTS idx_assets_fileType ON assets(file_type);
     CREATE INDEX IF NOT EXISTS idx_assets_tags ON assets(tags);
   `).catch(err => console.error('PostgreSQL init error:', err));
 
@@ -76,12 +86,12 @@ if (isProd) {
       CREATE TABLE IF NOT EXISTS assets (
         id TEXT PRIMARY KEY,
         filename TEXT NOT NULL,
-        originalName TEXT NOT NULL,
-        fileType TEXT NOT NULL,
-        fileSize INTEGER NOT NULL,
-        uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+        original_name TEXT NOT NULL,
+        file_type TEXT NOT NULL,
+        file_size INTEGER NOT NULL,
+        upload_date DATETIME DEFAULT CURRENT_TIMESTAMP,
         tags TEXT,
-        filePath TEXT NOT NULL
+        file_path TEXT NOT NULL
       )
     `);
   });
