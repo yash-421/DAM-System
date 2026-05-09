@@ -56,7 +56,7 @@ function AssetCard({ asset, onDelete }) {
           target="_blank"
         >
           ↓ Download
-        </a>``
+        </a>
         <button
           onClick={() => onDelete(asset.id)}
           className="btn-delete"
