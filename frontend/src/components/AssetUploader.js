@@ -72,7 +72,7 @@ function AssetUploader({ onUploadSuccess }) {
         }
       );
 
-      setSuccess(`✓ File uploaded successfully: ${response.data.originalName}`);
+      setSuccess(`✓ File uploaded successfully: ${response.data.original_name}`);
       setFile(null);
       setTags('');
       setUploadProgress(0);

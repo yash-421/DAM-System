@@ -2,10 +2,10 @@ import React from 'react';
 import './AssetCard.css';
 
 function AssetCard({ asset, onDelete }) {
-  const getFileIcon = (fileType) => {
-    if (fileType.startsWith('image/')) return '🖼️';
-    if (fileType === 'application/pdf') return '📄';
-    if (fileType.startsWith('video/')) return '🎥';
+  const getFileIcon = (file_type) => {
+    if (file_type.startsWith('image/')) return '🖼️';
+    if (file_type === 'application/pdf') return '📄';
+    if (file_type.startsWith('video/')) return '🎥';
     return '📁';
   };
 
@@ -32,7 +32,7 @@ function AssetCard({ asset, onDelete }) {
         {isImage ? (
           <img
             src={`${API_BASE}/assets/${asset.filename}`}
-            alt={asset.originalName}
+            alt={asset.original_name}
             className="asset-image"
           />
         ) : (
@@ -41,10 +41,10 @@ function AssetCard({ asset, onDelete }) {
       </div>
 
       <div className="asset-info">
-        <h4 title={asset.originalName}>{asset.originalName}</h4>
-        <p className="file-type">{asset.fileType}</p>
-        <p className="file-size">{formatFileSize(asset.fileSize)}</p>
-        <p className="upload-date">{formatDate(asset.uploadDate)}</p>
+        <h4 title={asset.original_name}>{asset.original_name}</h4>
+        <p className="file-type">{asset.file_type}</p>
+        <p className="file-size">{formatFileSize(asset.file_size)}</p>
+        <p className="upload-date">{formatDate(asset.upload_date)}</p>
         {asset.tags && <p className="tags">Tags: {asset.tags}</p>}
       </div>
 
