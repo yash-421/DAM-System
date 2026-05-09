@@ -24,7 +24,7 @@ function AssetCard({ asset, onDelete }) {
     return new Date(dateString).toLocaleDateString();
   };
 
-  const isImage = asset.fileType.startsWith('image/');
+  const isImage = asset.file_type.startsWith('image/');
 
   return (
     <div className="asset-card">
@@ -36,7 +36,7 @@ function AssetCard({ asset, onDelete }) {
             className="asset-image"
           />
         ) : (
-          <div className="asset-icon">{getFileIcon(asset.fileType)}</div>
+          <div className="asset-icon">{getFileIcon(asset.file_type)}</div>
         )}
       </div>
 
