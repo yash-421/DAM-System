@@ -25,8 +25,7 @@ const corsOptions = {
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static('uploads'));
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
@@ -97,7 +96,9 @@ app.post('/api/assets/upload', upload.single('file'), (req, res) => {
         original_name: req.file.originalname,
         file_type: req.file.mimetype,
         file_size: req.file.size,
-        upload_date: new Date().toISOString()
+        upload_date: new Date().toISOString(),
+        tags: tags || '',
+        file_url: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
       });
     }
   );
@@ -147,7 +148,13 @@ app.get('/api/assets', (req, res) => {
       
       return res.status(500).json({ error: 'Database error' });
     }
-    res.json(rows);
+    const assets = rows.map(asset => ({
+      ...asset,
+      file_url: `${req.protocol}://${req.get('host')}/uploads/${asset.filename}`
+    }));
+
+    res.json(assets);
+
   });
 });
 

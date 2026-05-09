@@ -31,7 +31,7 @@ function AssetCard({ asset, onDelete }) {
       <div className="asset-preview">
         {isImage ? (
           <img
-            src={`${API_BASE}/assets/${asset.filename}`}
+            src={`${asset.file_url}`}
             alt={asset.original_name}
             className="asset-image"
           />
@@ -50,12 +50,12 @@ function AssetCard({ asset, onDelete }) {
 
       <div className="asset-actions">
         <a
-          href={`${API_BASE}/assets/${asset.id}/download`}
+          href={`${asset.file_url}`}
           className="btn-download"
           title="Download"
         >
           ↓ Download
-        </a>
+        </a>``
         <button
           onClick={() => onDelete(asset.id)}
           className="btn-delete"
