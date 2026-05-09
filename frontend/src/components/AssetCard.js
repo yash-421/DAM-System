@@ -53,6 +53,7 @@ function AssetCard({ asset, onDelete }) {
           href={`${asset.file_url}`}
           className="btn-download"
           title="Download"
+          target="_blank"
         >
           ↓ Download
         </a>``
