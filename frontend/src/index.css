@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px 0 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+header h1 {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 12px;
+  position: relative;
+  z-index: 1;
+  font-size: clamp(22px, 5vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-align: center;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(20px); }
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.uploader-section {
+  background: white;
+  padding: 0;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  height: fit-content;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.gallery-section {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 16px;
+  }
+  
+  header {
+    margin-bottom: 30px;
+  }
+  
+  .gallery-section {
+    padding: 25px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 20px;
+  }
+  
+  .main-content {
+    grid-template-columns: 360px 1fr;
+    gap: 30px;
+  }
+  
+  header {
+    padding: 40px 0 30px;
+    margin-bottom: 40px;
+  }
+  
+  header h1 {
+    text-align: left;
+  }
+  
+  .gallery-section {
+    padding: 30px;
+  }
+}
