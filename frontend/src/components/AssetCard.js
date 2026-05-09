@@ -50,7 +50,7 @@ function AssetCard({ asset, onDelete }) {
 
       <div className="asset-actions">
         <a
-          href={`${API_BASE_URL}/api/assets/${asset.id}/download`}
+          href={`${API_BASE}/api/assets/${asset.id}/download`}
           className="btn-download"
           title="Download"
           target="_blank"
